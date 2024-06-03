@@ -15,6 +15,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
+    @GetMapping("/board")
     public List<Board> getBoards() {
         List<BoardEntity> boardEntities = boardRepository.getBoards();
 
@@ -44,7 +45,7 @@ public class BoardService {
 
     public void deleteBoard(Long boardId) {
         BoardEntity boardEntity = boardRepository.getBoard(boardId);
-        boardRepository.deleteBoard(boardEntity.getId());
+        boardRepository.deleteBoard(boardEntity.getId(),boardEntity.getContent(), boardEntity.getTitle(), boardEntity.getUserId());
     }
 
     public void updateBoard(Long boarId, String updateTitle, String updateContent, String userId) {

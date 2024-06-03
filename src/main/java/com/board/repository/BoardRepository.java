@@ -1,5 +1,6 @@
 package com.board.repository;
 
+import com.board.controller.UpdateBoardRequestDto;
 import com.board.service.Board;
 import org.springframework.stereotype.Repository;
 
@@ -38,8 +39,11 @@ public class BoardRepository {
         return boardEntity;
     }
 
-    public void deleteBoard(Long boardId) {
+    public void deleteBoard(Long boardId, String content, String title, String userId) {
         boardStore.remove(boardId);
+        boardStore.remove(content);
+        boardStore.remove(title);
+        boardStore.remove(userId);
     }
 
     public void updateBoard(Board board) {

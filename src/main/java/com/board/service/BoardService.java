@@ -5,7 +5,6 @@ import com.board.repository.BoardEntity;
 import com.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -14,6 +13,11 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+
+    public void createBoard(String title, String content, String userId) {
+        Board board = new Board(null, title, content, userId);
+        boardRepository.createBoard(board);
+    }
 
     public List<Board> getBoards() {
         List<BoardEntity> boardEntities = boardRepository.getBoards();
@@ -25,21 +29,10 @@ public class BoardService {
         return boardList;
     }
 
-    public void newBoard(String title, String content, String userId) {
-        Board board = new Board(null, title, content, userId);
-        boardRepository.createBoard(board);
-    }
-
-
     public Board getBoard(Long boardId) {
         BoardEntity boardEntity = boardRepository.getBoard(boardId);
 
-        return new Board(
-                boardEntity.getId(),
-                boardEntity.getTitle(),
-                boardEntity.getContent(),
-                boardEntity.getUserId()
-        );
+        return new Board(boardEntity.getId(), boardEntity.getTitle(), boardEntity.getContent(), boardEntity.getUserId());
     }
 
     public void deleteBoard(Long boardId) {
@@ -47,9 +40,9 @@ public class BoardService {
         boardRepository.deleteBoard(boardEntity.getId());
     }
 
-    public void updateBoard(Long boarId, String updateTitle, String updateContent, String userId) {
+    public void updateBoard(Long boardId, UpdateBoardRequestDto updateBoardRequestDto) {
+        BoardEntity boardEntity = boardRepository.getBoard(boardId);
 
-        Board board = new Board(boarId, updateTitle, updateContent, userId);
-        boardRepository.updateBoard(board);
+        boardRepository.updateBoard(boardEntity.getId(), updateBoardRequestDto);
     }
 }

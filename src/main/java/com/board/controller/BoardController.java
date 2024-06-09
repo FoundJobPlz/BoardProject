@@ -16,8 +16,19 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    @PostMapping(path = "/board")
+    public ResponseEntity<Board> createBoard(@RequestBody CreateBoardRequestDto createBoardRequestDto) {
+        boardService.createBoard(
+                createBoardRequestDto.getTitle(),
+                createBoardRequestDto.getContent(),
+                createBoardRequestDto.getUserId()
+        );
+
+        return ResponseEntity.created(URI.create("http://loaclhost:8080")).build();
+    }
+
     @GetMapping(path = "/board")
-    public ResponseEntity<List<Board>> getBoardList() {
+    public ResponseEntity<List<Board>> getBoards() {
         List<Board> boards = boardService.getBoards();
 
         return ResponseEntity.ok().body(boards);
@@ -37,17 +48,6 @@ public class BoardController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @PostMapping(path = "/board")
-    public ResponseEntity<Board> newBoard(@RequestBody CreateBoardRequestDto createBoardRequestDto) {
-        boardService.newBoard(
-                createBoardRequestDto.getTitle(),
-                createBoardRequestDto.getContent(),
-                createBoardRequestDto.getUserId()
-        );
-
-        return ResponseEntity.created(URI.create("http://loaclhost:8080")).build();
-    }
-
     @DeleteMapping(path = "/board/{boardId}")
     public ResponseEntity<Board> deleteBoard(@PathVariable Long boardId) {
         boardService.deleteBoard(boardId);
@@ -55,12 +55,8 @@ public class BoardController {
     }
 
     @PatchMapping("/board/{boardId}")
-    public ResponseEntity<Board> updateBoard(@RequestBody UpdateBoardRequestDto boardId) {
-        boardService.updateBoard(
-                boardId.getId(),
-                boardId.getTitle(),
-                boardId.getContent(),
-                boardId.getUserId());
+    public ResponseEntity<UpdateBoardRequestDto> updateBoard(@PathVariable Long boardId, @RequestBody UpdateBoardRequestDto updateBoardRequestDto) {
+        boardService.updateBoard(boardId, updateBoardRequestDto);
 
         return ResponseEntity.ok().build();
     }

@@ -1,8 +1,10 @@
 package com.board.repository;
 
+import com.board.controller.UpdateBoardRequestDto;
 import com.board.service.Board;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,24 +13,25 @@ import java.util.Map;
 public class BoardRepository {
 
     private Map<Long, BoardEntity> boardStore = new HashMap<>();
-    private Long id = 1L;
+    private Long id = 0L;
 
     /**
      * Repository <-> DB
      * @return
      */
-    public List<BoardEntity> getBoards() {
-        return boardStore.values().stream().toList();
-    }
 
     public void createBoard(Board board) {
-
-        BoardEntity boardEntity = new BoardEntity(id++, board.getTitle(), board.getContent(), board.getUserId());
+        BoardEntity boardEntity = new BoardEntity(++id, board.getTitle(), board.getContent(), board.getUserId());
 
         boardStore.put(boardEntity.getId(), boardEntity);
     }
 
+    public List<BoardEntity> getBoards() {
+        return new ArrayList<>(boardStore.values());
+    }
+
     public BoardEntity getBoard(Long boardId) {
+
         BoardEntity boardEntity = boardStore.get(boardId);
 
         if (boardEntity == null) {
@@ -42,10 +45,13 @@ public class BoardRepository {
         boardStore.remove(boardId);
     }
 
-    public void updateBoard(Board board) {
-        BoardEntity boardEntity = new BoardEntity(board.getId(), board.getTitle(), board.getContent(), board.getUserId());
+    public void updateBoard(Long boarId, UpdateBoardRequestDto updateBoard) {
+        BoardEntity findBoard = boardStore.get(boarId);
+        findBoard.setTitle(updateBoard.getTitle());
+        findBoard.setContent(updateBoard.getContent());
+    }
 
-
-        boardStore.put(boardEntity.getId(), boardEntity);
+    public void clearBoard() {
+        boardStore.clear();
     }
 }

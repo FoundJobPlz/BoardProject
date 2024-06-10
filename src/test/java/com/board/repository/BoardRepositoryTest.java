@@ -4,6 +4,8 @@ import com.board.controller.UpdateBoardRequestDto;
 import com.board.service.Board;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
@@ -13,15 +15,15 @@ class BoardRepositoryTest {
 
     BoardRepository boardRepository = new BoardRepository();
 
-//    @AfterEach
-//    void afterEach() {
-//        boardRepository.clearBoard();
-//    }
+    @AfterEach
+    void afterEach() {
+        boardRepository.clearBoard();
+    }
 
     @Test
     public void save() throws Exception{
         //given
-        Board board = new Board(1L, "test", "test1", "userA");
+        Board board = new Board("test", "test1", "userA");
 
         //when
         boardRepository.createBoard(board);
@@ -36,8 +38,8 @@ class BoardRepositoryTest {
     @Test
     public void findAll() throws Exception{
         //given
-        Board board1 = new Board(1L, "testA", "test1", "userA");
-        Board board2 = new Board(2L, "testB", "test2", "userB");
+        Board board1 = new Board("testA", "test1", "userA");
+        Board board2 = new Board("testB", "test2", "userB");
 
         boardRepository.createBoard(board1);
         boardRepository.createBoard(board2);
@@ -52,7 +54,7 @@ class BoardRepositoryTest {
     @Test
     public void update() throws Exception{
         //given
-        Board board1 = new Board(1L, "testA", "test1", "userA");
+        Board board1 = new Board("testA", "test1", "userA");
 
         boardRepository.createBoard(board1);
         Long boardId = board1.getId();

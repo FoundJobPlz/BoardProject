@@ -3,7 +3,6 @@ package com.board.controller;
 import com.board.service.Board;
 import com.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +27,8 @@ public class BoardController {
     }
 
     @GetMapping(path = "/board")
-    public ResponseEntity<List<Board>> getBoards() {
-        List<Board> boards = boardService.getBoards();
+    public ResponseEntity<List<ListBoardResponseDto>> getBoards() {
+        List<ListBoardResponseDto> boards = boardService.getBoards();
 
         return ResponseEntity.ok().body(boards);
     }

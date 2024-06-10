@@ -2,8 +2,6 @@ package com.board.repository;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 @Entity
@@ -22,8 +20,7 @@ public class BoardEntity {
     @Column(nullable = false, length = 30)
     private String userId;
 
-    public BoardEntity(Long id, String title, String content, String userId) {
-        this.id = id;
+    public BoardEntity(String title, String content, String userId) {
         this.title = title;
         this.content = content;
         this.userId = userId;

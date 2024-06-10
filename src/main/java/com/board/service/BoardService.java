@@ -1,5 +1,6 @@
 package com.board.service;
 
+import com.board.controller.ListBoardResponseDto;
 import com.board.controller.UpdateBoardRequestDto;
 import com.board.repository.BoardEntity;
 import com.board.repository.BoardRepository;
@@ -15,24 +16,30 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     public void createBoard(String title, String content, String userId) {
-        Board board = new Board(null, title, content, userId);
+        Board board = new Board(title, content, userId);
         boardRepository.createBoard(board);
     }
 
-    public List<Board> getBoards() {
+    public List<ListBoardResponseDto> getBoards() {
         List<BoardEntity> boardEntities = boardRepository.getBoards();
 
-        List<Board> boardList = boardEntities.stream().map(
-                boardEntity -> new Board(boardEntity.getId(), boardEntity.getTitle(),
-                        boardEntity.getContent(), boardEntity.getUserId())).toList();
+        return getBoardList(boardEntities);
+    }
 
-        return boardList;
+    public static List<ListBoardResponseDto> getBoardList(List<BoardEntity> boardEntities) {
+        return boardEntities.stream().map(boardEntity ->
+                        new ListBoardResponseDto(
+                                boardEntity.getId(),
+                                boardEntity.getTitle(),
+                                boardEntity.getContent(),
+                                boardEntity.getUserId()))
+                .toList();
     }
 
     public Board getBoard(Long boardId) {
         BoardEntity boardEntity = boardRepository.getBoard(boardId);
 
-        return new Board(boardEntity.getId(), boardEntity.getTitle(), boardEntity.getContent(), boardEntity.getUserId());
+        return new Board(boardEntity.getTitle(), boardEntity.getContent(), boardEntity.getUserId());
     }
 
     public void deleteBoard(Long boardId) {

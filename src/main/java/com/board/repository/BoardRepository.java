@@ -12,8 +12,7 @@ import java.util.Map;
 @Repository
 public class BoardRepository {
 
-    private Map<Long, BoardEntity> boardStore = new HashMap<>();
-    private Long id = 0L;
+    private final Map<Long, BoardEntity> boardStore = new HashMap<>();
 
     /**
      * Repository <-> DB
@@ -21,7 +20,7 @@ public class BoardRepository {
      */
 
     public void createBoard(Board board) {
-        BoardEntity boardEntity = new BoardEntity(++id, board.getTitle(), board.getContent(), board.getUserId());
+        BoardEntity boardEntity = new BoardEntity(board.getTitle(), board.getContent(), board.getUserId());
 
         boardStore.put(boardEntity.getId(), boardEntity);
     }

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+//@Repository
 public class BoardRepository {
 
     private final Map<Long, BoardEntity> boardStore = new HashMap<>();

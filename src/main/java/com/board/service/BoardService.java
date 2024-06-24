@@ -1,5 +1,6 @@
 package com.board.service;
 
+import com.board.controller.CreateBoardRequestDto;
 import com.board.controller.ListBoardResponseDto;
 import com.board.controller.UpdateBoardRequestDto;
 import com.board.repository.BoardEntity;
@@ -9,14 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public void createBoard(String title, String content, String userId) {
-        Board board = new Board(title, content, userId);
+    public void createBoard(CreateBoardRequestDto createBoardRequestDto) {
+        Board board = new Board(createBoardRequestDto.getTitle(), createBoardRequestDto.getContent(), createBoardRequestDto.getUserId());
         boardRepository.createBoard(board);
     }
 

@@ -1,8 +1,8 @@
 package com.board.controller;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class ListBoardResponseDto {
 
     private Long id;

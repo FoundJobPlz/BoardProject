@@ -25,10 +25,11 @@ public class JpaBoardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ListBoardResponseDto>> getBoards() {
+    public ResponseEntity<ListBoardResponse> getBoards() {
         List<ListBoardResponseDto> boards = boardService.getBoards();
+        ListBoardResponse listBoardResponse = new ListBoardResponse(boards);
 
-        return ResponseEntity.ok().body(boards);
+        return ResponseEntity.ok().body(listBoardResponse);
     }
 
     @GetMapping(path = "/{boardId}")

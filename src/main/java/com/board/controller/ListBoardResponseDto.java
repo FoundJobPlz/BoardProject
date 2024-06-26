@@ -1,16 +1,16 @@
 package com.board.controller;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
-public class GetBoardResponseDto {
+@Getter
+public class ListBoardResponseDto {
 
     private Long id;
     private String title;
     private String content;
     private String userId;
 
-    public GetBoardResponseDto(Long id, String title, String content, String userId) {
+    public ListBoardResponseDto(Long id, String title, String content, String userId) {
         this.id = id;
         this.title = title;
         this.content = content;

@@ -8,10 +8,7 @@ import lombok.Setter;
 @Data
 public class UpdateBoardRequestDto {
 
-    private final Long id;
-    private final String userId;
     private final String title;
     private final String content;
-
 
 }

@@ -1,45 +1,46 @@
 package com.board.service;
 
+import com.board.controller.CreateBoardRequestDto;
+import com.board.controller.ListBoardResponseDto;
 import com.board.controller.UpdateBoardRequestDto;
 import com.board.repository.BoardEntity;
 import com.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public List<Board> getBoards() {
-        List<BoardEntity> boardEntities = boardRepository.getBoards();
-
-        List<Board> boardList = boardEntities.stream().map(
-                boardEntity -> new Board(boardEntity.getId(), boardEntity.getTitle(),
-                        boardEntity.getContent(), boardEntity.getUserId())).toList();
-
-        return boardList;
-    }
-
-    public void newBoard(String title, String content, String userId) {
-        Board board = new Board(null, title, content, userId);
+    public void createBoard(CreateBoardRequestDto createBoardRequestDto) {
+        Board board = new Board(createBoardRequestDto.getTitle(), createBoardRequestDto.getContent(), createBoardRequestDto.getUserId());
         boardRepository.createBoard(board);
     }
 
+    public List<ListBoardResponseDto> getBoards() {
+        List<BoardEntity> boardEntities = boardRepository.getBoards();
+
+        return getBoardList(boardEntities);
+    }
+
+    public static List<ListBoardResponseDto> getBoardList(List<BoardEntity> boardEntities) {
+        return boardEntities.stream().map(boardEntity ->
+                        new ListBoardResponseDto(
+                                boardEntity.getId(),
+                                boardEntity.getTitle(),
+                                boardEntity.getContent(),
+                                boardEntity.getUserId()))
+                .toList();
+    }
 
     public Board getBoard(Long boardId) {
         BoardEntity boardEntity = boardRepository.getBoard(boardId);
 
-        return new Board(
-                boardEntity.getId(),
-                boardEntity.getTitle(),
-                boardEntity.getContent(),
-                boardEntity.getUserId()
-        );
+        return new Board(boardEntity.getTitle(), boardEntity.getContent(), boardEntity.getUserId());
     }
 
     public void deleteBoard(Long boardId) {
@@ -47,9 +48,9 @@ public class BoardService {
         boardRepository.deleteBoard(boardEntity.getId());
     }
 
-    public void updateBoard(Long boarId, String updateTitle, String updateContent, String userId) {
+    public void updateBoard(Long boardId, UpdateBoardRequestDto updateBoardRequestDto) {
+        BoardEntity boardEntity = boardRepository.getBoard(boardId);
 
-        Board board = new Board(boarId, updateTitle, updateContent, userId);
-        boardRepository.updateBoard(board);
+        boardRepository.updateBoard(boardEntity.getId(), updateBoardRequestDto);
     }
 }

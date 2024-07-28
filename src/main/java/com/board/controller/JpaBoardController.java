@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,10 +27,8 @@ public class JpaBoardController {
 
     @GetMapping
     public ResponseEntity<ListBoardResponse> getBoards() {
-        List<ListBoardResponseDto> boards = boardService.getBoards();
-        ListBoardResponse listBoardResponse = new ListBoardResponse(boards);
 
-        return ResponseEntity.ok().body(listBoardResponse);
+        return ResponseEntity.ok().body(new ListBoardResponse(boardService.getBoards()));
     }
 
     @GetMapping(path = "/{boardId}")

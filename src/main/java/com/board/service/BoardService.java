@@ -22,9 +22,8 @@ public class BoardService {
     }
 
     public List<ListBoardResponseDto> getBoards() {
-        List<BoardEntity> boardEntities = boardRepository.getBoards();
 
-        return getBoardList(boardEntities);
+        return getBoardList(boardRepository.getBoards());
     }
 
     public static List<ListBoardResponseDto> getBoardList(List<BoardEntity> boardEntities) {

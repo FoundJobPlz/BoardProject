@@ -1,18 +1,20 @@
 package com.board.service;
 
-import com.board.controller.CreateBoardRequestDto;
-import com.board.controller.GetBoardResponseDto;
-import com.board.controller.ListBoardResponseDto;
-import com.board.controller.UpdateBoardRequestDto;
+import com.board.controller.dto.CreateBoardRequestDto;
+import com.board.controller.dto.GetBoardResponseDto;
+import com.board.controller.dto.ListBoardResponseDto;
+import com.board.controller.dto.UpdateBoardRequestDto;
 import com.board.repository.BoardEntity;
 import com.board.repository.JpaBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class JpaBoardService {
 
     private final JpaBoardRepository jpaBoardRepository;

@@ -1,4 +1,4 @@
-package com.board.controller;
+package com.board.controller.dto;
 
 import lombok.Data;
 

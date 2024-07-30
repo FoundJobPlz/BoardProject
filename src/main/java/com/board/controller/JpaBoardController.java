@@ -1,15 +1,16 @@
 package com.board.controller;
 
-import com.board.service.Board;
-import com.board.service.BoardService;
+import com.board.controller.dto.CreateBoardRequestDto;
+import com.board.controller.dto.GetBoardResponseDto;
+import com.board.controller.dto.ListBoardResponse;
+import com.board.controller.dto.UpdateBoardRequestDto;
+import com.board.repository.BoardEntity;
 import com.board.service.JpaBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Stream;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +20,8 @@ public class JpaBoardController {
     private final JpaBoardService boardService;
 
     @PostMapping
-    public ResponseEntity<Board> createBoard(@RequestBody CreateBoardRequestDto createBoardRequestDto) {
-        boardService.createBoard(createBoardRequestDto);
+    public ResponseEntity<BoardEntity> createBoard(@RequestBody CreateBoardRequestDto createBoardRequestDto) {
+        CreateBoardRequestDto createBoard = boardService.createBoard(createBoardRequestDto);
 
         return ResponseEntity.created(URI.create("http://loaclhost:8080")).build();
     }
@@ -37,7 +38,7 @@ public class JpaBoardController {
     }
 
     @DeleteMapping(path = "/{boardId}")
-    public ResponseEntity<Board> deleteBoard(@PathVariable Long boardId) {
+    public ResponseEntity<BoardEntity> deleteBoard(@PathVariable Long boardId) {
         boardService.deleteBoard(boardId);
         return ResponseEntity.ok().build();
     }

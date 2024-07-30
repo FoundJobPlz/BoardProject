@@ -1,9 +1,6 @@
-package com.board.controller;
+package com.board.controller.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Data
 public class UpdateBoardRequestDto {

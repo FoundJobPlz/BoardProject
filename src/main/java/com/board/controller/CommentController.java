@@ -1,52 +1,53 @@
 package com.board.controller;
 
-import com.board.controller.dto.CreateCommentRequestDto;
-import com.board.controller.dto.GetCommentResponse;
-import com.board.controller.dto.ListCommentResponse;
-import com.board.controller.dto.UpdateCommentRequestDto;
+import com.board.controller.dto.*;
 import com.board.repository.CommentEntity;
 import com.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/board")
 public class CommentController {
 
     private final CommentService commentService;
 
     @PostMapping(path = "/{boardId}/comment")
-    public ResponseEntity<CreateCommentRequestDto> createComment(@PathVariable Long boardId, @RequestBody CreateCommentRequestDto createCommentRequestDto) {
-        CreateCommentRequestDto createdComment = commentService.createComment(boardId, createCommentRequestDto);
+    public ResponseEntity createComment(@PathVariable(name = "boardId") Long boardId, @RequestBody CreateCommentRequestDto createCommentRequestDto) {
+        commentService.createComment(boardId, createCommentRequestDto);
 
-        return ResponseEntity.created(URI.create("/boards/" + boardId + "/comment")).body(createdComment);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path = "/{boardId}/comment")
-    public ResponseEntity<ListCommentResponse> getComments(@PathVariable Long boardId) {
+    public ResponseEntity<ListCommentResponseDto> getComments(@PathVariable(name = "boardId") Long boardId) {
+        List<CommentDto> comments = commentService.getComments(boardId);
 
-        return ResponseEntity.ok().body(new ListCommentResponse(commentService.getComments(boardId)));
+        ListCommentResponseDto responseDto = ListCommentResponseDto.builder().comments(comments).build();
+
+        return ResponseEntity.ok().body(responseDto);
 
     }
 
     @GetMapping(path = "/comment/{commentId}")
-    public ResponseEntity<GetCommentResponse> getComment(@PathVariable Long commentId) {
-        GetCommentResponse getCommentResponse = new GetCommentResponse(commentService.getComment(commentId));
+    public ResponseEntity<CommentDto> getComment(@PathVariable(name = "commentId") Long commentId) {
+        CommentDto responseDto = commentService.getComment(commentId);
 
-        return ResponseEntity.ok().body(getCommentResponse);
+        return ResponseEntity.ok().body(responseDto);
     }
 
-    @PatchMapping("/comment/{commentId}/edit")
-    public ResponseEntity<Void> updateComment(@PathVariable Long commentId, @RequestBody UpdateCommentRequestDto updateCommentRequestDto) {
+    @PatchMapping("/comment/{commentId}")
+    public ResponseEntity<Void> updateComment(@PathVariable(name = "commentId") Long commentId, @RequestBody UpdateCommentRequestDto updateCommentRequestDto) {
         commentService.updateComment(commentId, updateCommentRequestDto.getContent());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(path = "/comment/{commentId}")
-    public ResponseEntity<CommentEntity> deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity<CommentEntity> deleteComment(@PathVariable(name = "commentId") Long commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity.ok().build();
     }

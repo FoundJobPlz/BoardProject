@@ -2,8 +2,7 @@ package com.board.service;
 
 import com.board.controller.dto.CreateCommentRequestDto;
 import com.board.controller.dto.GetCommentResponseDto;
-import com.board.controller.dto.ListCommentResponseDto;
-import com.board.controller.dto.UpdateCommentRequestDto;
+import com.board.controller.dto.CommentDto;
 import com.board.repository.BoardEntity;
 import com.board.repository.CommentEntity;
 import com.board.repository.CommentRepository;
@@ -16,51 +15,76 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class CommentService {
 
     private final JpaBoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
-    public CreateCommentRequestDto createComment(Long boardId, CreateCommentRequestDto createCommentRequestDto) {
+    @Transactional
+    public void createComment(Long boardId, CreateCommentRequestDto createCommentRequestDto) {
+        BoardEntity boardEntity = boardFindByIdOrThrow(boardId);
 
-        BoardEntity boardEntity = boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다"));
-        CommentEntity commentEntity = new CommentEntity(createCommentRequestDto.getContent(), createCommentRequestDto.getUserId(), boardEntity);
+        CommentEntity commentEntity = CommentEntity.builder()
+                .content(createCommentRequestDto.getContent())
+                .userId(createCommentRequestDto.getUserId())
+                .boardEntity(boardEntity)
+                .build();
+
         commentRepository.save(commentEntity);
-
-        return new CreateCommentRequestDto(commentEntity.getContent(), commentEntity.getUserId(), boardEntity.getId());
     }
 
-    public List<ListCommentResponseDto> getComments(Long boardId) {
+    @Transactional(readOnly = true)
+    public List<CommentDto> getComments(Long boardId) {
 
-        boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다"));
+        if (!boardRepository.existsById(boardId)) throw new IllegalArgumentException("존재하지 않는 게시판입니다.");
 
-        return commentRepository.findByBoardEntityId(boardId).stream().map(commentEntity ->
-                new ListCommentResponseDto(
-                        commentEntity.getId(),
-                        commentEntity.getContent(),
-                        commentEntity.getUserId(),
-                        commentEntity.getBoardEntity().getId()))
+        return commentRepository.findAllByBoardEntityId(boardId)
+                .stream()
+                .map(commentEntity ->
+                        CommentDto.builder().id(commentEntity.getId())
+                                .content(commentEntity.getContent())
+                                .boardId(commentEntity.getBoardEntity().getId())
+                                .userId(commentEntity.getUserId())
+                                .build()
+                )
                 .toList();
     }
 
-    public GetCommentResponseDto getComment(Long commentId) {
-        CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("해당 댓글은 존재하지 않습니다"));
-        return new GetCommentResponseDto(commentEntity.getId(), commentEntity.getContent(), commentEntity.getUserId(), commentEntity.getBoardEntity().getId());
+    @Transactional(readOnly = true)
+    public CommentDto getComment(Long commentId) {
+        CommentEntity commentEntity = commentFindByIdOrThrow(commentId);
+
+        return CommentDto.builder()
+                .id(commentEntity.getId())
+                .content(commentEntity.getContent())
+                .boardId(commentEntity.getBoardEntity().getId())
+                .userId(commentEntity.getUserId())
+                .build();
     }
 
+    @Transactional
     public void deleteComment(Long commentId) {
-        commentRepository.deleteById(commentId);
+        if (commentRepository.existsById(commentId)) {
+            commentRepository.deleteById(commentId);
+            return;
+        }
+
+        throw new IllegalArgumentException("존재하지 않는 댓글입니다.");
     }
 
+    @Transactional
     public void updateComment(Long commentId, String newContent) {
+        CommentEntity findComment = commentFindByIdOrThrow(commentId);
 
-        CommentEntity findComment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("해당 댓글은 존재하지 않습니다"));
-        findComment.setContent(newContent);
+        findComment.updateContent(newContent);
     }
 
-    public void clearComment() {
-        commentRepository.deleteAll();
+    private BoardEntity boardFindByIdOrThrow(Long boardId) {
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다"));
+    }
+
+    private CommentEntity commentFindByIdOrThrow(Long commentId) {
+        return commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("해당 댓글은 존재하지 않습니다"));
     }
 }

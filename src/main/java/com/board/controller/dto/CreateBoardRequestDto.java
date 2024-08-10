@@ -11,9 +11,4 @@ public class CreateBoardRequestDto {
     private String content;
     private String userId;
 
-    public CreateBoardRequestDto(String title, String content, String userId) {
-        this.title = title;
-        this.content = content;
-        this.userId = userId;
-    }
 }

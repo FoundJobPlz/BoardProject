@@ -19,7 +19,7 @@ public class BoardService {
 
     @Transactional
     public void createBoard(CreateBoardRequestDto createBoardRequestDto) {
-        BoardEntity boardEntity = new BoardEntity(createBoardRequestDto.getTitle(), createBoardRequestDto.getContent(), createBoardRequestDto.getUserId());
+        BoardEntity boardEntity = BoardEntity.builder().title(createBoardRequestDto.getTitle()).content(createBoardRequestDto.getContent()).build();
 
         jpaBoardRepository.save(boardEntity);
     }
@@ -56,8 +56,8 @@ public class BoardService {
     public void updateBoard(Long boardId, UpdateBoardRequestDto updateBoardRequestDto) {
         BoardEntity findBoard = findByIdOrThrow(boardId);
 
-        findBoard.setTitle(updateBoardRequestDto.getTitle());
-        findBoard.setContent(updateBoardRequestDto.getContent());
+        findBoard.updateTitle(updateBoardRequestDto.getTitle());
+        findBoard.updateContent(updateBoardRequestDto.getContent());
     }
 
     private BoardEntity findByIdOrThrow(Long boardId) {

@@ -25,8 +25,9 @@ public class BoardController {
 
     @GetMapping
     public ResponseEntity<ListBoardResponseDto> getBoards() {
+        ListBoardResponseDto response = ListBoardResponseDto.builder().list(boardService.getBoards()).build();
 
-        return ResponseEntity.ok().body(new ListBoardResponseDto(boardService.getBoards()));
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping(path = "/{boardId}")

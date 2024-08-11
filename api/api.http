@@ -1,0 +1,39 @@
+### POST createBoard
+POST http://localhost:8080/board
+Content-Type: application/json
+
+{
+  "title": "title1",
+  "content": "content1",
+  "userId": "1"
+}
+
+### GET boards
+GET http://localhost:8080/board
+
+### GET boardId
+GET http://localhost:8080/board/4
+
+### Delete board
+DELETE http://localhost:8080/board/4
+
+### Update board
+PATCH http://localhost:8080/board/4
+Content-Type: application/json
+
+{
+  "title": "update title",
+  "content": "update content"
+}
+
+### POST createComment
+POST http://localhost:8080/board/4/comment
+Content-Type: application/json
+
+{
+  "content": "content1",
+  "userId": "1"
+}
+
+### GET getCommnet
+GET http://localhost:8080/board/comment/1

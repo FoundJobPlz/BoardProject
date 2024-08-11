@@ -1,35 +1,33 @@
 package com.board.service;
 
-import com.board.controller.CreateBoardRequestDto;
-import com.board.controller.ListBoardResponseDto;
-import com.board.controller.UpdateBoardRequestDto;
+import com.board.controller.dto.CreateBoardRequestDto;
+import com.board.controller.dto.BoardDto;
+import com.board.controller.dto.UpdateBoardRequestDto;
 import com.board.repository.BoardEntity;
-import com.board.repository.BoardRepository;
+import com.board.repository.JpaBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-//@Service
+@Service
 @RequiredArgsConstructor
 public class BoardService {
 
-    private final BoardRepository boardRepository;
+    private final JpaBoardRepository jpaBoardRepository;
 
+    @Transactional
     public void createBoard(CreateBoardRequestDto createBoardRequestDto) {
-        Board board = new Board(createBoardRequestDto.getTitle(), createBoardRequestDto.getContent(), createBoardRequestDto.getUserId());
-        boardRepository.createBoard(board);
+        BoardEntity boardEntity = BoardEntity.builder().title(createBoardRequestDto.getTitle()).content(createBoardRequestDto.getContent()).build();
+
+        jpaBoardRepository.save(boardEntity);
     }
 
-    public List<ListBoardResponseDto> getBoards() {
-        List<BoardEntity> boardEntities = boardRepository.getBoards();
-
-        return getBoardList(boardEntities);
-    }
-
-    public static List<ListBoardResponseDto> getBoardList(List<BoardEntity> boardEntities) {
-        return boardEntities.stream().map(boardEntity ->
-                        new ListBoardResponseDto(
+    @Transactional(readOnly = true)
+    public List<BoardDto> getBoards() {
+        return jpaBoardRepository.findAll().stream().map(boardEntity ->
+                        new BoardDto(
                                 boardEntity.getId(),
                                 boardEntity.getTitle(),
                                 boardEntity.getContent(),
@@ -37,20 +35,33 @@ public class BoardService {
                 .toList();
     }
 
-    public Board getBoard(Long boardId) {
-        BoardEntity boardEntity = boardRepository.getBoard(boardId);
+    @Transactional(readOnly = true)
+    public BoardDto getBoard(Long boardId) {
+        BoardEntity boardEntity = findByIdOrThrow(boardId);
 
-        return new Board(boardEntity.getTitle(), boardEntity.getContent(), boardEntity.getUserId());
+        return new BoardDto(boardEntity.getId(), boardEntity.getTitle(), boardEntity.getContent(), boardEntity.getUserId());
     }
 
+    @Transactional
     public void deleteBoard(Long boardId) {
-        BoardEntity boardEntity = boardRepository.getBoard(boardId);
-        boardRepository.deleteBoard(boardEntity.getId());
+        if (jpaBoardRepository.existsById(boardId)){
+            jpaBoardRepository.deleteById(boardId);
+            return;
+        }
+
+        throw new IllegalArgumentException("존재하지 않는 아이디입니다.");
     }
 
+    @Transactional
     public void updateBoard(Long boardId, UpdateBoardRequestDto updateBoardRequestDto) {
-        BoardEntity boardEntity = boardRepository.getBoard(boardId);
+        BoardEntity findBoard = findByIdOrThrow(boardId);
 
-        boardRepository.updateBoard(boardEntity.getId(), updateBoardRequestDto);
+        findBoard.updateTitle(updateBoardRequestDto.getTitle());
+        findBoard.updateContent(updateBoardRequestDto.getContent());
+    }
+
+    private BoardEntity findByIdOrThrow(Long boardId) {
+        return jpaBoardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("boardId에 해당되는 게시글이 존재하지 않습니다."));
     }
 }

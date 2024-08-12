@@ -1,4 +1,4 @@
-package com.board.controller.dto;
+package com.board.controller.dto.reply;
 
 import lombok.Builder;
 import lombok.Getter;

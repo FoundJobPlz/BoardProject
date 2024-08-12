@@ -1,11 +1,9 @@
-package com.board.controller.dto;
+package com.board.controller.dto.comment;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter

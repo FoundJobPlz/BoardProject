@@ -1,4 +1,4 @@
-package com.board.controller.dto;
+package com.board.controller.dto.reply;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

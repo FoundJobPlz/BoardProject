@@ -1,7 +1,7 @@
 package com.board.service;
 
-import com.board.controller.dto.CreateReplyRequestDto;
-import com.board.controller.dto.ReplyDto;
+import com.board.controller.dto.reply.CreateReplyRequestDto;
+import com.board.controller.dto.reply.ReplyDto;
 import com.board.repository.CommentEntity;
 import com.board.repository.CommentRepository;
 import com.board.repository.ReplyEntity;

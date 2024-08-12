@@ -1,4 +1,4 @@
-package com.board.controller.dto;
+package com.board.controller.dto.comment;
 
 import lombok.*;
 

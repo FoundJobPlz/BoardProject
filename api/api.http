@@ -22,8 +22,8 @@ PATCH http://localhost:8080/board/2
 Content-Type: application/json
 
 {
-  "title": "update title",
-  "content": "update content"
+  "title": "update title2",
+  "content": "update content2"
 }
 
 ### POST createComment
@@ -35,6 +35,9 @@ Content-Type: application/json
   "userId": "1"
 }
 
+### GEt getComments
+GET http://localhost:8080/board/2/comment
+
 ### GET getCommnet
 GET http://localhost:8080/board/comment/1
 
@@ -44,11 +47,14 @@ Content-Type: application/json
 
 {
   "content": "reply1",
-  "userId": "23"
+  "userId": "userId232"
 }
 
 ### GET getRepllies
 GET http://localhost:8080/comment/1/reply
 
+### DELETE deleteReply
+DELETE http://localhost:8080/comment/reply/54
+
 ### GET getReply
-GET http://localhost:8080/comment/reply/2
+GET http://localhost:8080/comment/reply/55

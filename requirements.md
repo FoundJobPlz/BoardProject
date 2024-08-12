@@ -1,10 +1,10 @@
-# 당근마켓 게시판 만들기 위해 제공해야 하는 API
+# 게시판 만들기 위해 제공해야 하는 API
 
-- 판매 게시글 목록 (Read)
-- 판매 글 상세 보기 (Read)
-- 판매 글 작성 (Create)
-- 판매 글 삭제 (Delete)
-- 판매 글 수정 (Update)
+- 게시글 목록 (Read)
+- 글 상세 보기 (Read)
+- 글 작성 (Create)
+- 글 삭제 (Delete)
+- 글 수정 (Update)
 
 REST API 작성시 RESTful 하게 작성해야 한다
 

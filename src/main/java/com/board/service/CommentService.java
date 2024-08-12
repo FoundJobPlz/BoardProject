@@ -1,12 +1,11 @@
 package com.board.service;
 
-import com.board.controller.dto.CreateCommentRequestDto;
-import com.board.controller.dto.GetCommentResponseDto;
-import com.board.controller.dto.CommentDto;
+import com.board.controller.dto.comment.CreateCommentRequestDto;
+import com.board.controller.dto.comment.CommentDto;
 import com.board.repository.BoardEntity;
 import com.board.repository.CommentEntity;
 import com.board.repository.CommentRepository;
-import com.board.repository.JpaBoardRepository;
+import com.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
 
-    private final JpaBoardRepository boardRepository;
+    private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
     @Transactional

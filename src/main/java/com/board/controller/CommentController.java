@@ -1,6 +1,9 @@
 package com.board.controller;
 
-import com.board.controller.dto.*;
+import com.board.controller.dto.comment.CommentDto;
+import com.board.controller.dto.comment.CreateCommentRequestDto;
+import com.board.controller.dto.comment.ListCommentResponseDto;
+import com.board.controller.dto.comment.UpdateCommentRequestDto;
 import com.board.repository.CommentEntity;
 import com.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +20,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping(path = "/{boardId}/comment")
-    public ResponseEntity createComment(@PathVariable(name = "boardId") Long boardId, @RequestBody CreateCommentRequestDto createCommentRequestDto) {
+    public ResponseEntity<?> createComment(@PathVariable(name = "boardId") Long boardId, @RequestBody CreateCommentRequestDto createCommentRequestDto) {
         commentService.createComment(boardId, createCommentRequestDto);
 
         return ResponseEntity.ok().build();
@@ -41,13 +44,13 @@ public class CommentController {
     }
 
     @PatchMapping("/comment/{commentId}")
-    public ResponseEntity<Void> updateComment(@PathVariable(name = "commentId") Long commentId, @RequestBody UpdateCommentRequestDto updateCommentRequestDto) {
+    public ResponseEntity<?> updateComment(@PathVariable(name = "commentId") Long commentId, @RequestBody UpdateCommentRequestDto updateCommentRequestDto) {
         commentService.updateComment(commentId, updateCommentRequestDto.getContent());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(path = "/comment/{commentId}")
-    public ResponseEntity<CommentEntity> deleteComment(@PathVariable(name = "commentId") Long commentId) {
+    public ResponseEntity<?> deleteComment(@PathVariable(name = "commentId") Long commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity.ok().build();
     }

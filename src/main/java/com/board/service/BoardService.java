@@ -1,10 +1,10 @@
 package com.board.service;
 
-import com.board.controller.dto.CreateBoardRequestDto;
-import com.board.controller.dto.BoardDto;
-import com.board.controller.dto.UpdateBoardRequestDto;
+import com.board.controller.dto.board.CreateBoardRequestDto;
+import com.board.controller.dto.board.BoardDto;
+import com.board.controller.dto.board.UpdateBoardRequestDto;
 import com.board.repository.BoardEntity;
-import com.board.repository.JpaBoardRepository;
+import com.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,18 +15,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
 
-    private final JpaBoardRepository jpaBoardRepository;
+    private final BoardRepository boardRepository;
 
     @Transactional
     public void createBoard(CreateBoardRequestDto createBoardRequestDto) {
-        BoardEntity boardEntity = BoardEntity.builder().title(createBoardRequestDto.getTitle()).content(createBoardRequestDto.getContent()).build();
+        BoardEntity boardEntity = BoardEntity.builder()
+                .title(createBoardRequestDto.getTitle())
+                .content(createBoardRequestDto.getContent())
+                .userId(createBoardRequestDto.getUserId())
+                .build();
 
-        jpaBoardRepository.save(boardEntity);
+        boardRepository.save(boardEntity);
     }
 
     @Transactional(readOnly = true)
     public List<BoardDto> getBoards() {
-        return jpaBoardRepository.findAll().stream().map(boardEntity ->
+        return boardRepository.findAll().stream().map(boardEntity ->
                         new BoardDto(
                                 boardEntity.getId(),
                                 boardEntity.getTitle(),
@@ -44,8 +48,8 @@ public class BoardService {
 
     @Transactional
     public void deleteBoard(Long boardId) {
-        if (jpaBoardRepository.existsById(boardId)){
-            jpaBoardRepository.deleteById(boardId);
+        if (boardRepository.existsById(boardId)){
+            boardRepository.deleteById(boardId);
             return;
         }
 
@@ -61,7 +65,7 @@ public class BoardService {
     }
 
     private BoardEntity findByIdOrThrow(Long boardId) {
-        return jpaBoardRepository.findById(boardId)
+        return boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("boardId에 해당되는 게시글이 존재하지 않습니다."));
     }
 }

@@ -19,7 +19,11 @@ public class BoardService {
 
     @Transactional
     public void createBoard(CreateBoardRequestDto createBoardRequestDto) {
-        BoardEntity boardEntity = BoardEntity.builder().title(createBoardRequestDto.getTitle()).content(createBoardRequestDto.getContent()).build();
+        BoardEntity boardEntity = BoardEntity.builder()
+                .title(createBoardRequestDto.getTitle())
+                .content(createBoardRequestDto.getContent())
+                .userId(createBoardRequestDto.getUserId())
+                .build();
 
         jpaBoardRepository.save(boardEntity);
     }

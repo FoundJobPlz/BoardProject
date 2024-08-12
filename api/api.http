@@ -5,20 +5,20 @@ Content-Type: application/json
 {
   "title": "title1",
   "content": "content1",
-  "userId": "1"
+  "userId": "id1"
 }
 
 ### GET boards
 GET http://localhost:8080/board
 
 ### GET boardId
-GET http://localhost:8080/board/4
+GET http://localhost:8080/board/2
 
 ### Delete board
-DELETE http://localhost:8080/board/4
+DELETE http://localhost:8080/board/1
 
 ### Update board
-PATCH http://localhost:8080/board/4
+PATCH http://localhost:8080/board/2
 Content-Type: application/json
 
 {
@@ -27,7 +27,7 @@ Content-Type: application/json
 }
 
 ### POST createComment
-POST http://localhost:8080/board/4/comment
+POST http://localhost:8080/board/2/comment
 Content-Type: application/json
 
 {
@@ -37,3 +37,18 @@ Content-Type: application/json
 
 ### GET getCommnet
 GET http://localhost:8080/board/comment/1
+
+### POST createReply
+POST http://localhost:8080/comment/1/reply
+Content-Type: application/json
+
+{
+  "content": "reply1",
+  "userId": "23"
+}
+
+### GET getRepllies
+GET http://localhost:8080/comment/1/reply
+
+### GET getReply
+GET http://localhost:8080/comment/reply/2

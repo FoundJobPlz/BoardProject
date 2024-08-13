@@ -1,4 +1,4 @@
-package com.board.controller.dto;
+package com.board.controller.dto.member;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

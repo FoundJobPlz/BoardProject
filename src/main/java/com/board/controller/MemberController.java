@@ -1,9 +1,9 @@
 package com.board.controller;
 
-import com.board.controller.dto.CreateMemberRequestDto;
-import com.board.controller.dto.ListMemberResponseDto;
-import com.board.controller.dto.MemberDto;
-import com.board.controller.dto.UpdateMemberRequestDto;
+import com.board.controller.dto.member.CreateMemberRequestDto;
+import com.board.controller.dto.member.ListMemberResponseDto;
+import com.board.controller.dto.member.MemberDto;
+import com.board.controller.dto.member.UpdateMemberRequestDto;
 import com.board.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

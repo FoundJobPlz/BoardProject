@@ -2,10 +2,8 @@ package com.board.service;
 
 import com.board.controller.dto.comment.CreateCommentRequestDto;
 import com.board.controller.dto.comment.CommentDto;
-import com.board.repository.BoardEntity;
-import com.board.repository.CommentEntity;
-import com.board.repository.CommentRepository;
-import com.board.repository.BoardRepository;
+import com.board.controller.dto.comment.GetCommentReplyResponseDto;
+import com.board.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +16,7 @@ public class CommentService {
 
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
+    private final CommentQueryRepository commentQueryRepository;
 
     @Transactional
     public void createComment(Long boardId, CreateCommentRequestDto createCommentRequestDto) {
@@ -50,15 +49,16 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public CommentDto getComment(Long commentId) {
-        CommentEntity commentEntity = commentFindByIdOrThrow(commentId);
-
-        return CommentDto.builder()
-                .id(commentEntity.getId())
-                .content(commentEntity.getContent())
-                .boardId(commentEntity.getBoardEntity().getId())
-                .userId(commentEntity.getUserId())
-                .build();
+    public GetCommentReplyResponseDto getComment(Long commentId) {
+        return commentQueryRepository.findCommentReply(commentId);
+//        CommentEntity commentEntity = commentFindByIdOrThrow(commentId);
+//
+//        return CommentDto.builder()
+//                .id(commentEntity.getId())
+//                .content(commentEntity.getContent())
+//                .boardId(commentEntity.getBoardEntity().getId())
+//                .userId(commentEntity.getUserId())
+//                .build();
     }
 
     @Transactional

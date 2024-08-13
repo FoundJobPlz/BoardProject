@@ -1,8 +1,8 @@
 package com.board.service;
 
-import com.board.controller.dto.CreateMemberRequestDto;
-import com.board.controller.dto.MemberDto;
-import com.board.controller.dto.UpdateMemberRequestDto;
+import com.board.controller.dto.member.CreateMemberRequestDto;
+import com.board.controller.dto.member.MemberDto;
+import com.board.controller.dto.member.UpdateMemberRequestDto;
 import com.board.repository.BoardRepository;
 import com.board.repository.MemberEntity;
 import com.board.repository.MemberGrade;

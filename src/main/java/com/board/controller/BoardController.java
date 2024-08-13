@@ -1,9 +1,7 @@
 package com.board.controller;
 
-import com.board.controller.dto.board.BoardDto;
-import com.board.controller.dto.board.CreateBoardRequestDto;
-import com.board.controller.dto.board.ListBoardResponseDto;
-import com.board.controller.dto.board.UpdateBoardRequestDto;
+import com.board.controller.dto.board.GetBoardCommentResponseDto;
+import com.board.controller.dto.board.*;
 import com.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +29,7 @@ public class BoardController {
     }
 
     @GetMapping(path = "/{boardId}")
-    public ResponseEntity<BoardDto> getBoard(@PathVariable(name = "boardId") Long boardId) {
+    public ResponseEntity<GetBoardCommentResponseDto> getBoard(@PathVariable(name = "boardId") Long boardId) {
         return ResponseEntity.ok(boardService.getBoard(boardId));
     }
 

@@ -1,9 +1,6 @@
 package com.board.controller;
 
-import com.board.controller.dto.comment.CommentDto;
-import com.board.controller.dto.comment.CreateCommentRequestDto;
-import com.board.controller.dto.comment.ListCommentResponseDto;
-import com.board.controller.dto.comment.UpdateCommentRequestDto;
+import com.board.controller.dto.comment.*;
 import com.board.repository.CommentEntity;
 import com.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +34,8 @@ public class CommentController {
     }
 
     @GetMapping(path = "/comment/{commentId}")
-    public ResponseEntity<CommentDto> getComment(@PathVariable(name = "commentId") Long commentId) {
-        CommentDto responseDto = commentService.getComment(commentId);
+    public ResponseEntity<GetCommentReplyResponseDto> getComment(@PathVariable(name = "commentId") Long commentId) {
+        GetCommentReplyResponseDto responseDto = commentService.getComment(commentId);
 
         return ResponseEntity.ok().body(responseDto);
     }

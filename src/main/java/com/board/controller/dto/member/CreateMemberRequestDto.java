@@ -1,4 +1,4 @@
-package com.board.controller.dto;
+package com.board.controller.dto.member;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;

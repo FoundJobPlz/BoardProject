@@ -27,12 +27,12 @@ Content-Type: application/json
 }
 
 ### POST createComment
-POST http://localhost:8080/board/2/comment
+POST http://localhost:8080/board/3/comment
 Content-Type: application/json
 
 {
-  "content": "content1",
-  "userId": "1"
+  "content": "content2",
+  "userId": "2"
 }
 
 ### GEt getComments
@@ -42,7 +42,7 @@ GET http://localhost:8080/board/2/comment
 GET http://localhost:8080/board/comment/1
 
 ### POST createReply
-POST http://localhost:8080/comment/1/reply
+POST http://localhost:8080/comment/2/reply
 Content-Type: application/json
 
 {

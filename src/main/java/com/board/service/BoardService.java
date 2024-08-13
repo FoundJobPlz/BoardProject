@@ -1,9 +1,11 @@
 package com.board.service;
 
+import com.board.controller.dto.board.GetBoardCommentResponseDto;
 import com.board.controller.dto.board.CreateBoardRequestDto;
 import com.board.controller.dto.board.BoardDto;
 import com.board.controller.dto.board.UpdateBoardRequestDto;
 import com.board.repository.BoardEntity;
+import com.board.repository.BoardQueryRepository;
 import com.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardQueryRepository boardQueryRepository;
 
     @Transactional
     public void createBoard(CreateBoardRequestDto createBoardRequestDto) {
@@ -40,10 +43,17 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public BoardDto getBoard(Long boardId) {
-        BoardEntity boardEntity = findByIdOrThrow(boardId);
+    public GetBoardCommentResponseDto getBoard(Long boardId) {
+        return boardQueryRepository.findBoardComments(boardId);
+//        BoardEntity boardEntity = findByIdOrThrow(boardId);
 
-        return new BoardDto(boardEntity.getId(), boardEntity.getTitle(), boardEntity.getContent(), boardEntity.getUserId());
+//        return GetBoardResponseDto.builder()
+//                .id(boardId)
+//                .title(boardEntity.getTitle())
+//                .content(boardEntity.getContent())
+//                .userId(boardEntity.getUserId())
+//                .commentEntities(boardEntity.getCommentEntities())
+//                .build();
     }
 
     @Transactional

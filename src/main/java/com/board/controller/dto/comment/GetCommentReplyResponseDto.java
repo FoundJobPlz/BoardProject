@@ -1,27 +1,23 @@
 package com.board.controller.dto.comment;
 
-import com.board.controller.dto.reply.ReplyDto;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class GetCommentReplyResponseDto {
 
-    private Long commentId;
+    private Long replyId;
     private String content;
     private String userId;
+    private Long commentId;
 
-    private List<ReplyDto> replies;
 
-    @Builder
-    public GetCommentReplyResponseDto(Long commentId, String content, String userId, List<ReplyDto> replies) {
-        this.commentId = commentId;
+    public GetCommentReplyResponseDto(Long replyId, String content, String userId, Long commentId) {
+        this.replyId = replyId;
         this.content = content;
         this.userId = userId;
-        this.replies = replies;
+        this.commentId = commentId;
     }
 }

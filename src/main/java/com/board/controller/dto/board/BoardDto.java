@@ -1,15 +1,26 @@
 package com.board.controller.dto.board;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+import java.util.List;
+
+@NoArgsConstructor
 @Getter
 public class BoardDto {
 
-    private final Long id;
-    private final String title;
-    private final String content;
-    private final String userId;
+    private Long id;
+    private String title;
+    private String content;
+    private String userId;
 
+    @Builder
+    public BoardDto(Long id, String title, String content, String userId) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.userId = userId;
+    }
 }

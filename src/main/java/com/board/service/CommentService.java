@@ -1,5 +1,6 @@
 package com.board.service;
 
+import com.board.controller.dto.comment.CommentQueryDto;
 import com.board.controller.dto.comment.CreateCommentRequestDto;
 import com.board.controller.dto.comment.CommentDto;
 import com.board.controller.dto.comment.GetCommentReplyResponseDto;
@@ -49,8 +50,8 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public GetCommentReplyResponseDto getComment(Long commentId) {
-        return commentQueryRepository.findCommentReply(commentId);
+    public CommentQueryDto getComment(Long boardId, Long commentId) {
+        return commentQueryRepository.findCommentReply(boardId,commentId);
 //        CommentEntity commentEntity = commentFindByIdOrThrow(commentId);
 //
 //        return CommentDto.builder()
@@ -62,7 +63,8 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long boardId, Long commentId) {
+        boardFindByIdOrThrow(boardId);
         if (commentRepository.existsById(commentId)) {
             commentRepository.deleteById(commentId);
             return;
@@ -72,7 +74,8 @@ public class CommentService {
     }
 
     @Transactional
-    public void updateComment(Long commentId, String newContent) {
+    public void updateComment(Long boardId, Long commentId, String newContent) {
+        boardFindByIdOrThrow(boardId);
         CommentEntity findComment = commentFindByIdOrThrow(commentId);
 
         findComment.updateContent(newContent);
@@ -80,7 +83,7 @@ public class CommentService {
 
     private BoardEntity boardFindByIdOrThrow(Long boardId) {
         return boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다"));
     }
 
     private CommentEntity commentFindByIdOrThrow(Long commentId) {

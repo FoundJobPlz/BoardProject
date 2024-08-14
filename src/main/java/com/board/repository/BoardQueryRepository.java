@@ -1,7 +1,8 @@
 package com.board.repository;
 
+import com.board.controller.dto.board.BoardDto;
+import com.board.controller.dto.board.BoardQueryDto;
 import com.board.controller.dto.board.GetBoardCommentResponseDto;
-import com.board.controller.dto.comment.CommentDto;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -14,35 +15,29 @@ public class BoardQueryRepository {
 
     private final EntityManager em;
 
-    public GetBoardCommentResponseDto findBoardComments(Long boardId) {
+    public BoardQueryDto findBoardComments(Long boardId) {
 
-        List<CommentEntity> commentEntities = em.createQuery(
-                        "select c" +
-                                " from CommentEntity c" +
-                                " where c.boardEntity.id = :boardId", CommentEntity.class)
-                .setParameter("boardId", boardId)
-                .getResultList();
+        BoardQueryDto result = findBoard(boardId);
+        result.putComments(findBoardAllComment(boardId));
 
-        BoardEntity boardEntity = em.createQuery(
-                        "select b" +
+        return result;
+    }
+
+    private BoardQueryDto findBoard(Long boardId) {
+        return em.createQuery(
+                        "select new com.board.controller.dto.board.BoardQueryDto(b.id, b.title, b.content, b.userId)" +
                                 " from BoardEntity b" +
-                                " where b.id = :boardId", BoardEntity.class)
+                                " where b.id = :boardId", BoardQueryDto.class)
                 .setParameter("boardId", boardId)
                 .getSingleResult();
+    }
 
-        List<CommentDto> commentDtos = commentEntities.stream().map(
-                commentEntity -> CommentDto.builder()
-                        .id(commentEntity.getId())
-                        .content(commentEntity.getContent())
-                        .userId(commentEntity.getUserId())
-                        .boardId(commentEntity.getBoardEntity().getId()).build()).toList();
-
-        return GetBoardCommentResponseDto.builder()
-                .boardId(boardEntity.getId())
-                .title(boardEntity.getTitle())
-                .content(boardEntity.getContent())
-                .userId(boardEntity.getUserId())
-                .commentList(commentDtos)
-                .build();
+    private List<GetBoardCommentResponseDto> findBoardAllComment(Long boardId) {
+        return em.createQuery(
+                        "select new com.board.controller.dto.board.GetBoardCommentResponseDto(c.id, c.content, c.userId, c.boardEntity.id)" +
+                                " from CommentEntity c" +
+                                " where c.boardEntity.id = : boardId", GetBoardCommentResponseDto.class)
+                .setParameter("boardId", boardId)
+                .getResultList();
     }
 }

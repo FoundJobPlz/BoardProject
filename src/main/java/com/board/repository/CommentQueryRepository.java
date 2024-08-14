@@ -1,5 +1,6 @@
 package com.board.repository;
 
+import com.board.controller.dto.comment.CommentQueryDto;
 import com.board.controller.dto.comment.GetCommentReplyResponseDto;
 import com.board.controller.dto.reply.ReplyDto;
 import jakarta.persistence.EntityManager;
@@ -14,35 +15,31 @@ public class CommentQueryRepository {
 
     private final EntityManager em;
 
-    public GetCommentReplyResponseDto findCommentReply(Long commentId) {
+    public CommentQueryDto findCommentReply(Long boardId,Long commentId) {
 
-        CommentEntity commentEntity = em.createQuery(
-                        "select c" +
+        CommentQueryDto result = findComment(boardId, commentId);
+        result.putReplyList(findCommentAllReply(commentId));
+
+        return result;
+    }
+
+    private CommentQueryDto findComment(Long boardId, Long commentId) {
+        return em.createQuery(
+                        "select new com.board.controller.dto.comment.CommentQueryDto(c.id, c.content, c.userId, c.boardEntity.id)" +
                                 " from CommentEntity c" +
-                                " where c.id = :commentId", CommentEntity.class)
+                                " where c.boardEntity.id =: boardId and c.id =: commentId", CommentQueryDto.class)
                 .setParameter("commentId", commentId)
+                .setParameter("boardId", boardId)
                 .getSingleResult();
+    }
 
-        List<ReplyEntity> resultEntityList = em.createQuery(
-                        "select r" +
+    private List<GetCommentReplyResponseDto> findCommentAllReply(Long commentId) {
+        return em.createQuery(
+                        "select new com.board.controller.dto.comment.GetCommentReplyResponseDto(r.id, r.content, r.userId, r.commentEntity.id)" +
                                 " from ReplyEntity r" +
-                                " where r.commentEntity.id = :commentId", ReplyEntity.class)
+                                " where r.commentEntity.id = :commentId", GetCommentReplyResponseDto.class)
                 .setParameter("commentId", commentId)
                 .getResultList();
-
-        List<ReplyDto> replyDtos = resultEntityList.stream().map(
-                replyEntity -> ReplyDto.builder()
-                        .id(replyEntity.getId())
-                        .content(replyEntity.getContent())
-                        .userId(replyEntity.getUserId())
-                        .commentId(replyEntity.getCommentEntity().getId())
-                        .build()).toList();
-
-        return GetCommentReplyResponseDto.builder()
-                .commentId(commentId)
-                .content(commentEntity.getContent())
-                .userId(commentEntity.getUserId())
-                .replies(replyDtos).build();
     }
 
 }

@@ -1,13 +1,14 @@
 package com.board.service;
 
-import com.board.controller.dto.board.GetBoardCommentResponseDto;
-import com.board.controller.dto.board.CreateBoardRequestDto;
-import com.board.controller.dto.board.BoardDto;
-import com.board.controller.dto.board.UpdateBoardRequestDto;
+import com.board.controller.dto.board.*;
 import com.board.repository.BoardEntity;
 import com.board.repository.BoardQueryRepository;
 import com.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,18 +33,20 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<BoardDto> getBoards() {
-        return boardRepository.findAll().stream().map(boardEntity ->
-                        new BoardDto(
-                                boardEntity.getId(),
-                                boardEntity.getTitle(),
-                                boardEntity.getContent(),
-                                boardEntity.getUserId()))
+    public List<BoardDto> getBoards(Pageable pageable) {
+        Page<BoardEntity> allBoardEntity = boardRepository.findAllBoard(pageable);
+        return allBoardEntity.stream().map(
+                boardEntity -> BoardDto.builder()
+                        .id(boardEntity.getId())
+                        .title(boardEntity.getTitle())
+                        .content(boardEntity.getContent())
+                        .userId(boardEntity.getUserId())
+                        .build())
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public GetBoardCommentResponseDto getBoard(Long boardId) {
+    public BoardQueryDto getBoard(Long boardId) {
         return boardQueryRepository.findBoardComments(boardId);
 //        BoardEntity boardEntity = findByIdOrThrow(boardId);
 

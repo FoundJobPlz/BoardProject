@@ -1,9 +1,10 @@
 package com.board.controller;
 
-import com.board.controller.dto.board.GetBoardCommentResponseDto;
 import com.board.controller.dto.board.*;
 import com.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +23,14 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<ListBoardResponseDto> getBoards() {
-        ListBoardResponseDto response = ListBoardResponseDto.builder().list(boardService.getBoards()).build();
+    public ResponseEntity<ListBoardResponseDto> getBoards(Pageable pageable) {
+        ListBoardResponseDto response = ListBoardResponseDto.builder().list(boardService.getBoards(pageable)).build();
 
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping(path = "/{boardId}")
-    public ResponseEntity<GetBoardCommentResponseDto> getBoard(@PathVariable(name = "boardId") Long boardId) {
+    public ResponseEntity<BoardQueryDto> getBoard(@PathVariable(name = "boardId") Long boardId) {
         return ResponseEntity.ok(boardService.getBoard(boardId));
     }
 

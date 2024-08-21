@@ -9,12 +9,12 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ListBoardResponseDto {
+public class PageBoardResponseDto {
 
-    private List<BoardDto> list;
+    private Page<BoardDto> page;
 
     @Builder
-    public ListBoardResponseDto(List<BoardDto> list) {
-        this.list = list;
+    public PageBoardResponseDto(Page<BoardDto> page) {
+        this.page = page;
     }
 }

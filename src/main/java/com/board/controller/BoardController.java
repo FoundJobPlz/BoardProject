@@ -4,6 +4,7 @@ import com.board.controller.dto.board.*;
 import com.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,9 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<ListBoardResponseDto> getBoards(Pageable pageable) {
-        ListBoardResponseDto response = ListBoardResponseDto.builder().list(boardService.getBoards(pageable)).build();
-
+    public ResponseEntity<PageBoardResponseDto> getBoards(@PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        PageBoardResponseDto response = PageBoardResponseDto.builder().page(boardService.getBoards(pageable)).build();
+        System.out.println(response);
         return ResponseEntity.ok().body(response);
     }
 

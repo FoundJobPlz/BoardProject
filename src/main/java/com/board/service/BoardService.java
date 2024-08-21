@@ -6,13 +6,9 @@ import com.board.repository.BoardQueryRepository;
 import com.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,30 +29,20 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<BoardDto> getBoards(Pageable pageable) {
-        Page<BoardEntity> allBoardEntity = boardRepository.findAllBoard(pageable);
-        return allBoardEntity.stream().map(
+    public Page<BoardDto> getBoards(Pageable pageable) {
+        Page<BoardEntity> allBoardEntity = boardRepository.findBoardAllCountBy(pageable);
+        return allBoardEntity.map(
                 boardEntity -> BoardDto.builder()
                         .id(boardEntity.getId())
                         .title(boardEntity.getTitle())
                         .content(boardEntity.getContent())
                         .userId(boardEntity.getUserId())
-                        .build())
-                .toList();
+                        .build());
     }
 
     @Transactional(readOnly = true)
     public BoardQueryDto getBoard(Long boardId) {
         return boardQueryRepository.findBoardComments(boardId);
-//        BoardEntity boardEntity = findByIdOrThrow(boardId);
-
-//        return GetBoardResponseDto.builder()
-//                .id(boardId)
-//                .title(boardEntity.getTitle())
-//                .content(boardEntity.getContent())
-//                .userId(boardEntity.getUserId())
-//                .commentEntities(boardEntity.getCommentEntities())
-//                .build();
     }
 
     @Transactional

@@ -1,21 +1,21 @@
 package com.board.service;
 
-import com.board.controller.dto.board.CreateBoardRequestDto;
-import com.board.controller.dto.board.BoardDto;
-import com.board.controller.dto.board.UpdateBoardRequestDto;
+import com.board.controller.dto.board.*;
 import com.board.repository.BoardEntity;
+import com.board.repository.BoardQueryRepository;
 import com.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardQueryRepository boardQueryRepository;
 
     @Transactional
     public void createBoard(CreateBoardRequestDto createBoardRequestDto) {
@@ -29,21 +29,20 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<BoardDto> getBoards() {
-        return boardRepository.findAll().stream().map(boardEntity ->
-                        new BoardDto(
-                                boardEntity.getId(),
-                                boardEntity.getTitle(),
-                                boardEntity.getContent(),
-                                boardEntity.getUserId()))
-                .toList();
+    public Page<BoardDto> getBoards(Pageable pageable) {
+        Page<BoardEntity> allBoardEntity = boardRepository.findBoardAllCountBy(pageable);
+        return allBoardEntity.map(
+                boardEntity -> BoardDto.builder()
+                        .id(boardEntity.getId())
+                        .title(boardEntity.getTitle())
+                        .content(boardEntity.getContent())
+                        .userId(boardEntity.getUserId())
+                        .build());
     }
 
     @Transactional(readOnly = true)
-    public BoardDto getBoard(Long boardId) {
-        BoardEntity boardEntity = findByIdOrThrow(boardId);
-
-        return new BoardDto(boardEntity.getId(), boardEntity.getTitle(), boardEntity.getContent(), boardEntity.getUserId());
+    public BoardQueryDto getBoard(Long boardId) {
+        return boardQueryRepository.findBoardComments(boardId);
     }
 
     @Transactional

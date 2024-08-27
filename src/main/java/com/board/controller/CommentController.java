@@ -1,9 +1,6 @@
 package com.board.controller;
 
-import com.board.controller.dto.comment.CommentDto;
-import com.board.controller.dto.comment.CreateCommentRequestDto;
-import com.board.controller.dto.comment.ListCommentResponseDto;
-import com.board.controller.dto.comment.UpdateCommentRequestDto;
+import com.board.controller.dto.comment.*;
 import com.board.repository.CommentEntity;
 import com.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -36,22 +33,22 @@ public class CommentController {
 
     }
 
-    @GetMapping(path = "/comment/{commentId}")
-    public ResponseEntity<CommentDto> getComment(@PathVariable(name = "commentId") Long commentId) {
-        CommentDto responseDto = commentService.getComment(commentId);
+    @GetMapping(path = "/{boardId}/comment/{commentId}")
+    public ResponseEntity<CommentQueryDto> getComment(@PathVariable(name = "boardId") Long boardId, @PathVariable(name = "commentId") Long commentId) {
+        CommentQueryDto responseDto = commentService.getComment(boardId,commentId);
 
         return ResponseEntity.ok().body(responseDto);
     }
 
-    @PatchMapping("/comment/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable(name = "commentId") Long commentId, @RequestBody UpdateCommentRequestDto updateCommentRequestDto) {
-        commentService.updateComment(commentId, updateCommentRequestDto.getContent());
+    @PatchMapping("/{boardId}/comment/{commentId}")
+    public ResponseEntity<?> updateComment(@PathVariable(name = "boardId") Long boardId, @PathVariable(name = "commentId") Long commentId, @RequestBody UpdateCommentRequestDto updateCommentRequestDto) {
+        commentService.updateComment(boardId,commentId, updateCommentRequestDto.getContent());
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(path = "/comment/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable(name = "commentId") Long commentId) {
-        commentService.deleteComment(commentId);
+    @DeleteMapping(path = "/{boardId}/comment/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable(name = "boardId") Long boardId, @PathVariable(name = "commentId") Long commentId) {
+        commentService.deleteComment(boardId, commentId);
         return ResponseEntity.ok().build();
     }
 }

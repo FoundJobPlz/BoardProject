@@ -1,11 +1,11 @@
 package com.board.controller;
 
-import com.board.controller.dto.board.BoardDto;
-import com.board.controller.dto.board.CreateBoardRequestDto;
-import com.board.controller.dto.board.ListBoardResponseDto;
-import com.board.controller.dto.board.UpdateBoardRequestDto;
+import com.board.controller.dto.board.*;
 import com.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +24,14 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<ListBoardResponseDto> getBoards() {
-        ListBoardResponseDto response = ListBoardResponseDto.builder().list(boardService.getBoards()).build();
-
+    public ResponseEntity<PageBoardResponseDto> getBoards(@PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        PageBoardResponseDto response = PageBoardResponseDto.builder().page(boardService.getBoards(pageable)).build();
+        System.out.println(response);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping(path = "/{boardId}")
-    public ResponseEntity<BoardDto> getBoard(@PathVariable(name = "boardId") Long boardId) {
+    public ResponseEntity<BoardQueryDto> getBoard(@PathVariable(name = "boardId") Long boardId) {
         return ResponseEntity.ok(boardService.getBoard(boardId));
     }
 

@@ -1,11 +1,10 @@
 package com.board.service;
 
+import com.board.controller.dto.comment.CommentQueryDto;
 import com.board.controller.dto.comment.CreateCommentRequestDto;
 import com.board.controller.dto.comment.CommentDto;
-import com.board.repository.BoardEntity;
-import com.board.repository.CommentEntity;
-import com.board.repository.CommentRepository;
-import com.board.repository.BoardRepository;
+import com.board.controller.dto.comment.GetCommentReplyResponseDto;
+import com.board.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +17,7 @@ public class CommentService {
 
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
+    private final CommentQueryRepository commentQueryRepository;
 
     @Transactional
     public void createComment(Long boardId, CreateCommentRequestDto createCommentRequestDto) {
@@ -50,19 +50,21 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public CommentDto getComment(Long commentId) {
-        CommentEntity commentEntity = commentFindByIdOrThrow(commentId);
-
-        return CommentDto.builder()
-                .id(commentEntity.getId())
-                .content(commentEntity.getContent())
-                .boardId(commentEntity.getBoardEntity().getId())
-                .userId(commentEntity.getUserId())
-                .build();
+    public CommentQueryDto getComment(Long boardId, Long commentId) {
+        return commentQueryRepository.findCommentReply(boardId,commentId);
+//        CommentEntity commentEntity = commentFindByIdOrThrow(commentId);
+//
+//        return CommentDto.builder()
+//                .id(commentEntity.getId())
+//                .content(commentEntity.getContent())
+//                .boardId(commentEntity.getBoardEntity().getId())
+//                .userId(commentEntity.getUserId())
+//                .build();
     }
 
     @Transactional
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long boardId, Long commentId) {
+        boardFindByIdOrThrow(boardId);
         if (commentRepository.existsById(commentId)) {
             commentRepository.deleteById(commentId);
             return;
@@ -72,7 +74,8 @@ public class CommentService {
     }
 
     @Transactional
-    public void updateComment(Long commentId, String newContent) {
+    public void updateComment(Long boardId, Long commentId, String newContent) {
+        boardFindByIdOrThrow(boardId);
         CommentEntity findComment = commentFindByIdOrThrow(commentId);
 
         findComment.updateContent(newContent);
@@ -80,7 +83,7 @@ public class CommentService {
 
     private BoardEntity boardFindByIdOrThrow(Long boardId) {
         return boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다"));
     }
 
     private CommentEntity commentFindByIdOrThrow(Long commentId) {

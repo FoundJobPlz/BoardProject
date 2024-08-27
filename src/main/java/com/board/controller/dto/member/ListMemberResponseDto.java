@@ -1,4 +1,4 @@
-package com.board.controller.dto.board;
+package com.board.controller.dto.member;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,12 +8,12 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ListBoardResponseDto {
+public class ListMemberResponseDto {
 
-    private List<BoardDto> list;
+    private List<MemberDto> list;
 
     @Builder
-    public ListBoardResponseDto(List<BoardDto> list) {
+    public ListMemberResponseDto(List<MemberDto> list) {
         this.list = list;
     }
 }

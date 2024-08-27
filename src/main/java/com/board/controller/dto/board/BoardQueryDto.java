@@ -1,26 +1,29 @@
 package com.board.controller.dto.board;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
 @Getter
-public class BoardDto {
+@NoArgsConstructor
+public class BoardQueryDto {
 
     private Long id;
     private String title;
     private String content;
     private String userId;
+    private List<GetBoardCommentResponseDto> comments;
 
-    @Builder
-    public BoardDto(Long id, String title, String content, String userId) {
+    public BoardQueryDto(Long id, String title, String content, String userId) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.userId = userId;
+    }
+
+    public void putComments(List<GetBoardCommentResponseDto> comments) {
+        this.comments = comments;
     }
 }

@@ -25,7 +25,7 @@ public class CommentQueryRepository {
 
     private CommentQueryDto findComment(Long boardId, Long commentId) {
         return em.createQuery(
-                        "select new com.board.controller.dto.comment.CommentQueryDto(c.id, c.content, c.userId, c.boardEntity.id)" +
+                        "select new com.board.controller.dto.comment.CommentQueryDto(c.id, c.content, c.userId, c.boardEntity.id, c.createdBy, c.lastModifiedDate, c.createdDate)" +
                                 " from CommentEntity c" +
                                 " where c.boardEntity.id =: boardId and c.id =: commentId", CommentQueryDto.class)
                 .setParameter("commentId", commentId)

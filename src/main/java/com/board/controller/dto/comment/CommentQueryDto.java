@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,11 +17,18 @@ public class CommentQueryDto {
     private Long boardId;
     private List<GetCommentReplyResponseDto> replyList;
 
-    public CommentQueryDto(Long id, String content, String userId, Long boardId) {
+    private String createdBy;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
+
+    public CommentQueryDto(Long id, String content, String userId, Long boardId, String createdBy, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.id = id;
         this.content = content;
         this.userId = userId;
         this.boardId = boardId;
+        this.createdBy = createdBy;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     public void putReplyList(List<GetCommentReplyResponseDto> replyList) {

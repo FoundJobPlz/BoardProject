@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "reply")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReplyEntity {
+public class ReplyEntity extends BaseEntity{
 
     @Id
     @GeneratedValue

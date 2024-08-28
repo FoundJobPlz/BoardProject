@@ -2,7 +2,12 @@ package com.board.repository;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +15,8 @@ import java.util.List;
 @Entity
 @Table(name = "board")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BoardEntity {
+@EntityListeners(AuditingEntityListener.class)
+public class BoardEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +36,7 @@ public class BoardEntity {
     private List<CommentEntity> commentEntities = new ArrayList<>();
 
     @Builder
-    public BoardEntity(String title, String content, String userId) {
+    public BoardEntity(String title, String content, String userId, LocalDateTime createAt) {
         this.title = title;
         this.content = content;
         this.userId = userId;

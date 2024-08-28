@@ -52,14 +52,6 @@ public class CommentService {
     @Transactional(readOnly = true)
     public CommentQueryDto getComment(Long boardId, Long commentId) {
         return commentQueryRepository.findCommentReply(boardId,commentId);
-//        CommentEntity commentEntity = commentFindByIdOrThrow(commentId);
-//
-//        return CommentDto.builder()
-//                .id(commentEntity.getId())
-//                .content(commentEntity.getContent())
-//                .boardId(commentEntity.getBoardEntity().getId())
-//                .userId(commentEntity.getUserId())
-//                .build();
     }
 
     @Transactional

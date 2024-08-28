@@ -3,22 +3,22 @@ POST http://localhost:8080/board
 Content-Type: application/json
 
 {
-  "title": "title1",
-  "content": "content1",
-  "userId": "id1"
+  "title": "title5",
+  "content": "content5",
+  "userId": "id5"
 }
 
 ### GET boards
 GET http://localhost:8080/board
 
 ### GET boardId
-GET http://localhost:8080/board/2
+GET http://localhost:8080/board/13
 
 ### Delete board
-DELETE http://localhost:8080/board/1
+DELETE http://localhost:8080/board/12
 
 ### Update board
-PATCH http://localhost:8080/board/2
+PATCH http://localhost:8080/board/7
 Content-Type: application/json
 
 {

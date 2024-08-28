@@ -25,7 +25,7 @@ public class BoardQueryRepository {
 
     private BoardQueryDto findBoard(Long boardId) {
         return em.createQuery(
-                        "select new com.board.controller.dto.board.BoardQueryDto(b.id, b.title, b.content, b.userId)" +
+                        "select new com.board.controller.dto.board.BoardQueryDto(b.id, b.title, b.content, b.userId, b.createdBy, b.lastModifiedDate, b.createdDate)" +
                                 " from BoardEntity b" +
                                 " where b.id = :boardId", BoardQueryDto.class)
                 .setParameter("boardId", boardId)
